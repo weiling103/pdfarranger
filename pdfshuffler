@@ -443,15 +443,16 @@ class PdfShuffler:
                     self.export_to_file(file_out)
                     self.export_directory = path
                     self.set_unsaved(False)
-                except IOError:
-                    error_msg_win = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,
+                except Exception, e:
+                    chooser.destroy()
+                    error_msg_dlg = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,
                                                       type=gtk.MESSAGE_ERROR,
-                       message_format=_("Error writing file: %s") % file_out,
+                                                      message_format=str(e),
                                                       buttons=gtk.BUTTONS_OK)
-                    response = error_msg_win.run()
+                    response = error_msg_dlg.run()
                     if response == gtk.RESPONSE_OK:
-                        error_msg_win.destroy()
-                    continue
+                        error_msg_dlg.destroy()
+                    return
             break
         chooser.destroy()
 
@@ -463,11 +464,15 @@ class PdfShuffler:
         for pdfdoc in self.pdfqueue:
             pdfdoc_inp = PdfFileReader(file(pdfdoc.copyname, 'rb'))
             if pdfdoc_inp.getIsEncrypted():
-                if (pdfdoc_inp.decrypt('')!=1): # Workaround for lp:#355479
-                    print(_('File %s is encrypted.') % pdfdoc.filename)
-                    print(_('Support for such files has not been implemented yet.'))
-                    print(_('File export failed.'))
-                    return
+                try: # Workaround for lp:#355479
+                    stat = pdfdoc_inp.decrypt('')
+                except:
+                    stat = 0
+                if (stat!=1):
+                    errmsg = _('File %s is encrypted.\n'
+                               'Support for encrypted files has not been implemented yet.\n'
+                               'File export failed.') % pdfdoc.filename
+                    raise Exception, errmsg
                 #FIXME
                 #else
                 #   ask for password and decrypt file
@@ -1025,12 +1030,15 @@ class PDF_Renderer(threading.Thread,gobject.GObject):
                         self.emit('update_thumbnail', idx, thumbnail)
                     finally:
                         self.emit('update_progress_bar', float(idx+1) / len(self.model),
-                            "Rendering thumbnails... [%s/%s]" % (idx+1, len(self.model)))
+                            _('Rendering thumbnails... [%(i1)s/%(i2)s]')
+                            % {'i1' : idx+1, 'i2' : len(self.model)})
             if scale_changed:
                 for row in self.model:
                     row[6] = False
                 scale = self.scale
             elif rendered_all:
+                self.emit('update_progress_bar', 1.,
+                    _('Rendering thumbnails... [%(i1)s/%(i1)s]') % {'i1' : len(self.model)})
                 if self.model.get_iter_first(): #just checking if model isn't empty
                     self.emit('reset_iv_width')
                 self.paused = True
