@@ -3,7 +3,7 @@
 #
 # PdfShuffler 0.6.0 - GTK+ based utility for splitting, rearrangement and 
 # modification of PDF documents.
-# Copyright (C) 2008-2011 Konstantinos Poulios
+# Copyright (C) 2008-2012 Konstantinos Poulios
 # <https://sourceforge.net/projects/pdfshuffler>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -25,11 +25,12 @@ import os
 import re
 from distutils.core import setup
 
-data_files=[('share/applications/pdfshuffler', ['data/pdfshuffler_menu.ui']),
-            ('share/applications/', ['data/pdfshuffler.desktop']),
+data_files=[('share/pdfshuffler', ['data/pdfshuffler.ui']),
+            ('share/applications', ['data/pdfshuffler.desktop']),
             ('share/man/man1', ['doc/pdfshuffler.1']),
-            ('share/pixmaps/', ['data/pdfshuffler.svg']),
-            ('share/pixmaps/', ['data/pdfshuffler.png']) ]
+            ('share/pixmaps', ['data/pdfshuffler.png']),
+            ('share/pdfshuffler/icons/hicolor/scalable',
+                ['data/pdfshuffler.svg']) ]
 
 
 # Freshly generate .mo from .po, add to data_files:
@@ -49,11 +50,12 @@ for name in os.listdir('po'):
 setup(name='pdfshuffler',
       version='0.6.0',
       author='Konstantinos Poulios',
-      author_email='poulios.konstantinos at gmail dot com',
+      author_email='logari81 at gmail dot com',
       description='A simple application for PDF Merging, Rearranging, and Splitting',
       url = 'https://sourceforge.net/projects/pdfshuffler',
       license='GNU GPL-3',
-      scripts=['pdfshuffler'],
+      scripts=['bin/pdfshuffler'],
+      packages=['pdfshuffler'],
       data_files=data_files
      )
 
