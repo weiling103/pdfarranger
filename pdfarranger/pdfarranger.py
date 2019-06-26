@@ -403,7 +403,8 @@ class PdfArranger(Gtk.Application):
         self.iconview.override_background_color(Gtk.StateFlags.PRELIGHT,
                                                 color_prelight)
 
-        self.popup = self.uiXML.get_object('popup_menu')
+        self.popup = Gtk.Menu.new_from_model(self.uiXML.get_object('popup_menu'))
+        self.popup.set_reserve_toggle_size(False)
         self.popup.attach_to_widget(self.window, None)
 
         # Initializing variables
