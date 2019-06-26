@@ -105,6 +105,28 @@ gettext.textdomain(DOMAIN)
 _ = gettext.gettext
 
 
+def gmenu_icons(container, menumodel):
+    menubar = None
+    print(container)
+    if isinstance(container, (Gtk.MenuBar, Gtk.MenuItem)):
+        menubar = container
+    else:
+        for c in container.get_children():
+            if isinstance(c, Gtk.MenuBar):
+                menubar = c
+    children = menubar.get_children()
+    assert(len(children) == menumodel.get_n_items())
+    for i in range(menumodel.get_n_items()):
+        it = menumodel.iterate_item_links(i)
+        mc = None
+        while it.next():
+            mc = it.get_value()
+        if mc:
+            gmenu_icons(children[i], mc)
+        it = menumodel.iterate_item_attributes(i)
+        while it.next():
+            print(it.get_name(), it.get_value())
+
 def _install_workaround_bug29():
     """ Install a workaround for https://gitlab.gnome.org/GNOME/pygobject/issues/29 """
     try:
@@ -301,7 +323,13 @@ class PdfArranger(Gtk.Application):
         self.uiXML.set_translation_domain(DOMAIN)
         self.uiXML.add_from_file(ui_path)
         self.uiXML.connect_signals(self)
-
+        menumodel = self.uiXML.get_object("menubar2")
+        self.set_menubar(menumodel)
+        # TODO: Scan the create Gtk.MenuBar and replace all Gtk.ModelMenuItem by
+	# Gtk.MenuItem depending on there associated action. Use Gtk.Box +
+	# Gtk.Image when the item have an icon. This is the the only way to get
+	# icons in menus because the GTK devs do not want them anymore. Only stateless
+        # actions menu items needs to be replaced.
         # Create the main window, and attach delete_event signal to terminating
         # the application
         self.window = self.uiXML.get_object('main_window')
@@ -387,6 +415,7 @@ class PdfArranger(Gtk.Application):
         # Define window callback function and show window
         self.window.connect('check_resize', self.on_window_size_request)
         self.window.show_all()
+        gmenu_icons(self.window, menumodel)
         self.progress_bar.hide()
 
         # Change iconview color background
