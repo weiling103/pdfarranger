@@ -11,3 +11,8 @@
 print(Gio.Action.print_detailed_name(self.impl.window.lookup_action("rotate").get_name(), GLib.Variant.new_int32(90)))
 Gtk.accelerator_name(Gdk.KEY_Delete, 0)=='Delete'
 ```
+
+## GMenu migration
+
+* <https://gitlab.gnome.org/GNOME/gtk/blob/master/demos/gtk-demo/shortcuts-builder.ui>
+* <https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ShortcutsWindow.html>
