@@ -367,6 +367,11 @@ class PdfArranger(Gtk.Application):
         self.window.connect('delete_event', self.close_application)
         self.window.set_position(Gtk.WindowPosition.CENTER)
 
+        hb = Gtk.HeaderBar()
+        hb.set_show_close_button(True)
+        hb.props.title = APPNAME
+        self.window.set_titlebar(hb)
+
         if hasattr(GLib, "unix_signal_add"):
             GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGINT, self.close_application)
 

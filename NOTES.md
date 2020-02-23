@@ -3,7 +3,6 @@
 * <https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Application.html*Gtk.Application.add_accelerator>
 * <https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html*Gtk.Widget.set_tooltip_text>
 * <https://gitlab.gnome.org/GNOME/pygobject/blob/master/gi/overrides/Gio.py*L137>
-* <warning: https://gitlab.gnome.org/GNOME/pygobject/issues/29>
 * <https://lazka.github.io/pgi-docs/Gio-2.0/classes/ActionMap.html*Gio.ActionMap.add_action_entries>
 * <https://lazka.github.io/pgi-docs/index.html*Gtk-3.0/classes/Application.html*Gtk.Application.set_accels_for_action>
 
@@ -16,3 +15,5 @@ Gtk.accelerator_name(Gdk.KEY_Delete, 0)=='Delete'
 
 * <https://gitlab.gnome.org/GNOME/gtk/blob/master/demos/gtk-demo/shortcuts-builder.ui>
 * <https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ShortcutsWindow.html>
+* <https://gitlab.gnome.org/GNOME/Initiatives/-/wikis/App-Menu-Retirement>
+* <https://developer.gnome.org/hig/stable>
